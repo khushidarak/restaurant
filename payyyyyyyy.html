@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ELAICHI • Payment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- QR Code Generator Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f0e6 0%, #e8e1d1 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Montserrat', sans-serif;
+      color: #3e3a35;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Decorative elements */
+    .decoration {
+      position: absolute;
+      opacity: 0.03;
+      z-index: 0;
+    }
+    .decoration-1 { top: 10%; left: 5%; font-size: 12rem; }
+    .decoration-2 { bottom: 15%; right: 8%; font-size: 10rem; transform: rotate(15deg); }
+
+    .payment-container {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .receipt-section, .payment-section {
+      background: rgba(255, 253, 249, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.12),
+        0 10px 20px rgba(193, 154, 107, 0.15);
+      width: 100%;
+      padding: 2.8rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(193, 154, 107, 0.1);
+    }
+
+    .receipt-section {
+      flex: 1;
+      min-width: 400px;
+    }
+
+    .payment-section {
+      flex: 1;
+      min-width: 400px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .section-header::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #c19a6b, #a67c52);
+      margin: 12px auto;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: #2c2823;
+      letter-spacing: 1px;
+    }
+
+    /* Receipt styling */
+    .receipt {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .restaurant-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .restaurant-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c2823;
+      margin-bottom: 0.3rem;
+    }
+
+    .restaurant-address {
+      font-size: 0.9rem;
+      color: #7a7368;
+    }
+
+    .receipt-details {
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .detail-label {
+      color: #5a544b;
+    }
+
+    .detail-value {
+      font-weight: 500;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+
+    .items-table th {
+      text-align: left;
+      padding: 0.8rem 0;
+      font-weight: 500;
+      color: #5a544b;
+      border-bottom: 2px solid #e0d9cc;
+    }
+
+    .items-table td {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0ebe3;
+    }
+
+    .item-name {
+      font-weight: 500;
+    }
+
+    .item-price {
+      text-align: right;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid #e0d9cc;
+    }
+
+    .total-amount {
+      color: #c19a6b;
+    }
+
+    /* Payment methods */
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-option {
+      background: #fdfcf9;
+      border: 2px solid #e0d9cc;
+      border-radius: 12px;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .payment-option:hover {
+      border-color: #c19a6b;
+      transform: translateY(-2px);
+    }
+
+    .payment-option.selected {
+      border-color: #c19a6b;
+      background: #fdf8f2;
+      box-shadow: 0 5px 15px rgba(193, 154, 107, 0.15);
+    }
+
+    .payment-option-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .payment-icon {
+      font-size: 1.4rem;
+      color: #c19a6b;
+    }
+
+    .payment-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #2c2823;
+    }
+
+    .payment-description {
+      font-size: 0.9rem;
+      color: #7a7368;
+      line-height: 1.5;
+    }
+
+    /* Payment forms */
+    .payment-form {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .payment-form.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      color: #5a544b;
+      font-size: 0.95rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid #e0d9cc;
+      border-radius: 8px;
+      background: #fdfcf9;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #3e3a35;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #c19a6b;
+      box-shadow: 0 0 0 3px rgba(193, 154, 107, 0.2);
+    }
+
+    /* Card form specific */
+    .card-inputs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .card-input {
+      flex: 1;
+    }
+
+    /* QR Code section */
+    .qr-section {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    .qr-code-container {
+      width: 220px;
+      height: 220px;
+      background: white;
+      margin: 0 auto 1.5rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #c19a6b;
+      box-shadow: 0 8px 20px rgba(193, 154, 107, 0.2);
+    }
+
+    #qrcode {
+      width: 200px;
+      height: 200px;
+    }
+
+    .payment-apps {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .app-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .gpay { background: #3d8d4e; }
+    .paytm { background: #00b0ff; }
+    .phonepe { background: #5f27cd; }
+    .upi { background: linear-gradient(135deg, #ff6b6b, #ff4757); }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, #c19a6b 0%, #a67c52 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-transform: uppercase;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(166, 124, 82, 0.4);
+    }
+
+    /* Loading animation */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 1.2rem;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(193, 154, 107, 0.3);
+      border-top: 3px solid #c19a6b;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Success message */
+    .success-message {
+      background: linear-gradient(to right, #e8f5e9, #d1f0d8);
+      border: 1px solid #c8e6c9;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .success-icon {
+      font-size: 2.5rem;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .payment-container {
+        flex-direction: column;
+      }
+      
+      .receipt-section, .payment-section {
+        min-width: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .payment-container {
+        padding: 1rem;
+      }
+      
+      .receipt-section, .payment-section {
+        padding: 1.8rem;
+      }
+      
+      .qr-code-container {
+        width: 180px;
+        height: 180px;
+      }
+      
+      #qrcode {
+        width: 160px;
+        height: 160px;
+      }
+      
+      .app-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+      }
+      
+      .card-inputs {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative elements -->
+  <div class="decoration decoration-1">
+    <i class="fas fa-utensils"></i>
+  </div>
+  <div class="decoration decoration-2">
+    <i class="fas fa-wine-glass"></i>
+  </div>
+
+  <div class="payment-container">
+    <!-- Receipt Section -->
+    <div class="receipt-section">
+      <div class="section-header">
+        <h2 class="section-title">Payment Slip</h2>
+      </div>
+      
+      <div class="receipt">
+        <div class="restaurant-info">
+          <div class="restaurant-name">ELAICHI</div>
+          <div class="restaurant-address">123 MG Road, Near City Mall, Shivajinagar, Pune- 05</div>
+        </div>
+        
+        <div class="receipt-details">
+          <div class="detail-row">
+            <span class="detail-label">Invoice #:</span>
+            <span class="detail-value">INV-<span id="invoice-number">001</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value" id="current-date">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Guest Name:</span>
+            <span class="detail-value" id="guest-name">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value" id="guest-email">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Phone:</span>
+            <span class="detail-value" id="guest-phone">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Reservation:</span>
+            <span class="detail-value" id="reservation-details">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Guests:</span>
+            <span class="detail-value" id="guest-count">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Special Requests:</span>
+            <span class="detail-value" id="special-requests">None</span>
+          </div>
+        </div>
+        
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="cart-items">
+            <!-- Cart items will be populated here -->
+          </tbody>
+        </table>
+        
+        <div class="total-row">
+          <span>Total Amount:</span>
+          <span class="total-amount" id="total-amount">₹0.00</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Payment Section -->
+    <div class="payment-section">
+      <div class="section-header">
+        <h2 class="section-title">Payment Method</h2>
+      </div>
+      
+      <!-- Payment Options -->
+      <div class="payment-methods">
+        <div class="payment-option selected" data-method="cash">
+          <div class="payment-option-header">
+            <div class="payment-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="payment-title">Cash Payment</div>
+          </div>
+          <div class="payment-description">
+            Pay conveniently after your dining experience at our restaurant.
+          </div>
+        </div>
+        
+        <div class="payment-option" data-method="card">
+          <div class="payment-option-header">
+            <div class="payment-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="payment-title">Credit/Debit Card</div>
+          </div>
+          <div class="payment-description">
+            Secure payment using your credit or debit card.
+          </div>
+        </div>
+        
+        <div class="payment-option" data-method="online">
+          <div class="payment-option-header">
+            <div class="payment-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="payment-title">Online Payment (UPI)</div>
+          </div>
+          <div class="payment-description">
+            Scan QR code to pay instantly via popular UPI apps.
+          </div>
+        </div>
+      </div>
+      
+      <!-- Payment Forms -->
+      <div id="cash-form" class="payment-form active">
+        <div class="payment-description" style="text-align: center; padding: 1.5rem; background: #f8f5f0; border-radius: 12px;">
+          <i class="fas fa-check-circle" style="color: #4CAF50; font-size: 2rem; margin-bottom: 1rem;"></i>
+          <p style="font-size: 1.1rem; line-height: 1.6;">
+            Your reservation is confirmed! Please settle the bill of 
+            <strong class="total-amount" id="cash-amount">₹0.00</strong> after your delightful dining experience with us.
+          </p>
+          <p style="font-size: 0.95rem; color: #7a7368; margin-top: 0.5rem;">
+            Our staff will present your final bill with a complimentary dessert.
+          </p>
+        </div>
+      </div>
+      
+      <div id="card-form" class="payment-form">
+        <div class="form-group">
+          <label for="card-number">Card Number</label>
+          <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+        </div>
+        <div class="form-group">
+          <label for="card-name">Name on Card</label>
+          <input type="text" id="card-name" placeholder="John Doe">
+        </div>
+        <div class="card-inputs">
+          <div class="card-input form-group">
+            <label for="card-expiry">Expiry Date</label>
+            <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="card-input form-group">
+            <label for="card-cvv">CVV</label>
+            <input type="password" id="card-cvv" placeholder="123" maxlength="4">
+          </div>
+        </div>
+      </div>
+      
+      <div id="online-form" class="payment-form">
+        <div class="qr-section">
+          <div class="qr-code-container">
+            <div id="qrcode"></div>
+          </div>
+          <p style="font-size: 1.2rem; color: #3e3a35; font-weight: 500;">
+            Scan to pay <strong class="total-amount" id="qr-amount">₹0</strong>
+          </p>
+          <p style="font-size: 0.95rem; color: #7a7368; margin-top: 0.5rem;">
+            UPI ID: <strong>elaichi@upi</strong>
+          </p>
+        </div>
+        
+        <div class="payment-apps">
+          <div class="app-icon gpay" title="Google Pay">
+            <i class="fab fa-google-pay"></i>
+          </div>
+          <div class="app-icon paytm" title="Paytm">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="app-icon phonepe" title="PhonePe">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <div class="app-icon upi" title="BHIM UPI">
+            <i class="fas fa-rupee-sign"></i>
+          </div>
+        </div>
+        
+        <div class="payment-description" style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #7a7368;">
+          Open your UPI app, scan the QR code, and confirm payment.<br>
+          You'll receive instant confirmation via SMS and email.
+        </div>
+      </div>
+      
+      <button class="submit-btn" id="pay-btn">
+        <i class="fas fa-lock"></i> Confirm & Pay
+      </button>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Processing your payment...</p>
+      </div>
+      
+      <div class="success-message" id="success-message">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h3>Payment Successful!</h3>
+        <p>Your reservation at ELAICHI is confirmed. We look forward to serving you!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set current date
+    const now = new Date();
+    document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    
+    // Generate random invoice number
+    document.getElementById('invoice-number').textContent = Math.floor(1000 + Math.random() * 9000);
+    
+    // Get cart data from localStorage (saved from order.html)
+    function getCartData() {
+      const savedCart = localStorage.getItem('elaichiCart');
+      if (savedCart) {
+        return JSON.parse(savedCart);
+      }
+      
+      // Fallback: if no cart found, show sample items
+      return [
+        { name: "Butter Chicken", quantity: 1, price: 380 },
+        { name: "Paneer Tikka", quantity: 1, price: 380 },
+        { name: "Naan", quantity: 2, price: 60 },
+        { name: "Mango Lassi", quantity: 2, price: 120 }
+      ];
+    }
+    
+    // Get booking data from localStorage (saved from booking.html)
+    function getBookingData() {
+      const bookingData = localStorage.getItem('elaichiBooking');
+      if (bookingData) {
+        return JSON.parse(bookingData);
+      }
+      
+      // Fallback data if no booking found
+      return {
+        name: "Guest User",
+        email: "guest@example.com",
+        phone: "+91-XXXX-XXXX",
+        date: now.toISOString().split('T')[0],
+        time: "19:30",
+        guests: "2",
+        special: "None"
+      };
+    }
+    
+    // Calculate and display cart
+    function displayCart() {
+      const cartItems = getCartData();
+      let total = 0;
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+      
+      cartItems.forEach(item => {
+        const itemTotal = item.quantity * item.price;
+        total += itemTotal;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="item-name">${item.name}</td>
+          <td>${item.quantity}</td>
+          <td class="item-price">₹${itemTotal.toLocaleString('en-IN')}</td>
+        `;
+        cartItemsContainer.appendChild(row);
+      });
+      
+      // Format total amount
+      const formattedTotal = `₹${total.toLocaleString('en-IN')}.00`;
+      document.getElementById('total-amount').textContent = formattedTotal;
+      document.getElementById('cash-amount').textContent = formattedTotal;
+      document.getElementById('qr-amount').textContent = total;
+      
+      return total;
+    }
+    
+    // Display booking details
+    function displayBookingDetails() {
+      const bookingData = getBookingData();
+      document.getElementById('guest-name').textContent = bookingData.name;
+      document.getElementById('guest-email').textContent = bookingData.email;
+      document.getElementById('guest-phone').textContent = bookingData.phone;
+      
+      // Format reservation details
+      const reservationDate = new Date(bookingData.date);
+      const formattedDate = reservationDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('reservation-details').textContent = `${formattedDate} at ${bookingData.time}`;
+      document.getElementById('guest-count').textContent = bookingData.guests;
+      document.getElementById('special-requests').textContent = bookingData.special || "None";
+    }
+    
+    // Generate QR Code
+    function generateQRCode(amount) {
+      // Create UPI payment string
+      const upiString = `upi://pay?pa=elaichi@upi&pn=ELAICHI%20Restaurant&am=${amount}&cu=INR&tn=Payment%20for%20ELAICHI%20Reservation`;
+      
+      // Clear existing QR code
+      document.getElementById('qrcode').innerHTML = '';
+      
+      // Generate new QR code
+      new QRCode(document.getElementById("qrcode"), {
+        text: upiString,
+        width: 200,
+        height: 200,
+        colorDark: "#2c2823",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+    
+    // Initialize the page
+    function initPaymentPage() {
+      const total = displayCart();
+      displayBookingDetails();
+      generateQRCode(total);
+    }
+    
+    // Payment method selection
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    const paymentForms = {
+      cash: document.getElementById('cash-form'),
+      card: document.getElementById('card-form'),
+      online: document.getElementById('online-form')
+    };
+    
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        paymentOptions.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        
+        Object.values(paymentForms).forEach(form => form.classList.remove('active'));
+        
+        const method = option.getAttribute('data-method');
+        paymentForms[method].classList.add('active');
+      });
+    });
+    
+    // Format card number input
+    document.getElementById('card-number').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      let formatted = '';
+      
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += value[i];
+      }
+      
+      e.target.value = formatted.substring(0, 19);
+    });
+    
+    // Format expiry date input
+    document.getElementById('card-expiry').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      e.target.value = value;
+    });
+    
+    // Payment submission
+    document.getElementById('pay-btn').addEventListener('click', function() {
+      const selectedMethod = document.querySelector('.payment-option.selected').getAttribute('data-method');
+      
+      // Basic validation for card payment
+      if (selectedMethod === 'card') {
+        const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+        const cardName = document.getElementById('card-name').value;
+        const cardExpiry = document.getElementById('card-expiry').value;
+        const cardCvv = document.getElementById('card-cvv').value;
+        
+        if (cardNumber.length !== 16 || cardName === '' || cardExpiry.length !== 5 || cardCvv.length < 3) {
+          alert('Please fill in all card details correctly.');
+          return;
+        }
+      }
+      
+      // Show loading
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('pay-btn').disabled = true;
+      
+      // Simulate payment processing
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('pay-btn').disabled = false;
+        document.getElementById('success-message').style.display = 'block';
+        
+        // Save payment info
+        const paymentInfo = {
+          method: selectedMethod,
+          amount: displayCart(), // Get total amount
+          timestamp: new Date().toISOString(),
+          status: 'completed'
+        };
+        localStorage.setItem('elaichiPayment', JSON.stringify(paymentInfo));
+        
+        // Clear cart after successful payment
+        localStorage.removeItem('elaichiCart');
+      }, 2000);
+    });
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initPaymentPage);
+  </script>
+</body>
+</html>

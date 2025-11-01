@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELAICHI - User Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9d7e4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            min-height: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #0056b3;
+            background-image: url('https://images.unsplash.com/photo-1578587287152-86138625a90c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: #fff;
+            z-index: 2;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0056b3;
+            text-transform: uppercase;
+        }
+
+        .user-dashboard-title {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .user-dashboard-title:hover {
+            background-color: #003a7a;
+        }
+
+        .main-content {
+            display: flex;
+            height: calc(100% - 60px);
+            z-index: 2;
+            position: relative;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            background-color: #111;
+            overflow-y: auto;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e6c38c;
+            border-bottom: 1px solid #000;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: #000;
+        }
+
+        .user-email {
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .logout-container {
+            display: flex;
+            align-items: center;
+            color: #000;
+        }
+
+        .logout-btn {
+            font-size: 12px;
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        /* Category styling */
+        .category-container {
+            background-color: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .category-header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .category-header:hover {
+            background-color: #555;
+        }
+
+        .category-items {
+            display: none;
+            background-color: #222;
+        }
+
+        .category-items.active {
+            display: block;
+        }
+
+        .menu-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .menu-table th {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .menu-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .menu-table tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        .menu-table tr:nth-child(odd) {
+            background-color: #2a2a2a;
+        }
+
+        .add-to-cart-btn {
+            padding: 5px 10px;
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #d35400;
+            transform: translateY(-1px);
+        }
+
+        .add-to-cart-btn.added {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background-color: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .cart-header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-count {
+            background-color: #e67e22;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #222;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-table th {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .cart-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .cart-table tr:nth-child(even) {
+            background-color: #3a3a3a;
+        }
+
+        .cart-table tr:nth-child(odd) {
+            background-color: #2a2a2a;
+        }
+
+        .remove-btn {
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .checkout-btn {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 15px;
+            display: block;
+            width: calc(100% - 30px);
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #219653;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Book-like styling */
+        .book-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(-2deg);
+        }
+
+        .book-page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(2deg);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                height: auto;
+                min-height: 100vh;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+            }
+            
+            .user-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .menu-table, .cart-table {
+                font-size: 11px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+            
+            .add-to-cart-btn, .remove-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
+            .checkout-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            .category-header {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-page"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ELAICHI</div>
+            <button class="user-dashboard-title">User Dashboard</button>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-area">
+                <div class="user-header">
+                    <div class="user-info">
+                        <span class="icon-user"></span>
+                        <span class="user-email" id="userEmail">Loading...</span>
+                    </div>
+                    <div class="logout-container">
+                        <span class="icon-shopping-cart"></span>
+                        <span class="logout-btn" id="logoutBtn">Logout</span>
+                    </div>
+                </div>
+                
+                <!-- Categories will be generated here -->
+                <div id="categories-container"></div>
+                
+                <!-- Cart Section (Initially Hidden) -->
+                <div class="cart-section">
+                    <div class="cart-header">
+                        <span>Your Cart</span>
+                        <span class="cart-count">0 items</span>
+                    </div>
+                    <div class="cart-items">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-items-body">
+                                <!-- Cart items will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart-footer">
+                        <div class="cart-total" style="padding: 15px; background-color: #333; color: white; font-weight: bold; text-align: right;">
+                            Total: ₹ <span id="cart-total-amount">0.00</span>
+                        </div>
+                        <button class="checkout-btn">Proceed to Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Element -->
+    <div class="notification" id="notification">Item added to cart!</div>
+
+    <script>
+        // EXACT menu data from your menu.html, organized by category
+        const menuData = [
+            {
+                category: "Sea-Food Starters",
+                items: [
+                    { name: "Fish Tikka", price: 490 },
+                    { name: "Prawn Tikka", price: 590 },
+                    { name: "Fish Barbeque Regular/Lemon", price: 800 },
+                    { name: "Tandoori Chicken", price: 590 },
+                    { name: "Chicken Kabab", price: 450 }
+                ]
+            },
+            {
+                category: "Vegetarian Starters",
+                items: [
+                    { name: "Paneer Tikka", price: 380 },
+                    { name: "Makhmali Seekh Kabab", price: 380 },
+                    { name: "Tandoori Broccoli", price: 380 },
+                    { name: "Mushroom Tikka", price: 350 },
+                    { name: "Manchurian Dry/ Gravy", price: 200 }
+                ]
+            },
+            {
+                category: "Soups",
+                items: [
+                    { name: "Mulligatawny", price: 140 },
+                    { name: "Tomato Shorba", price: 130 },
+                    { name: "Lentil Soup", price: 180 },
+                    { name: "Tomato Basil Soup", price: 200 },
+                    { name: "Manchow Soup", price: 200 }
+                ]
+            },
+            {
+                category: "Chicken Main Course",
+                items: [
+                    { name: "Butter Chicken", price: 380 },
+                    { name: "Chicken Tikka Masala", price: 360 },
+                    { name: "Chicken Vindaloo", price: 390 },
+                    { name: "Raan Mussalam", price: 1300 },
+                    { name: "Chicken Korma", price: 450 }
+                ]
+            },
+            {
+                category: "Mutton Main Course",
+                items: [
+                    { name: "Mutton Masala", price: 520 },
+                    { name: "Mutton Rogan Josh", price: 520 },
+                    { name: "Rara Mutton", price: 580 },
+                    { name: "Tawa Mutton", price: 580 },
+                    { name: "Charcoal Mutton Kofta Masala", price: 450 }
+                ]
+            },
+            {
+                category: "Vegetarian Main Course",
+                items: [
+                    { name: "Chana Masala", price: 220 },
+                    { name: "Dal Makhani", price: 350 },
+                    { name: "Dal Tadka", price: 350 },
+                    { name: "Butter Paneer", price: 390 },
+                    { name: "Hing Jeera Aloo", price: 280 },
+                    { name: "Palak Paneer", price: 260 }
+                ]
+            },
+            {
+                category: "Seafood Main Course",
+                items: [
+                    { name: "Fish Masala", price: 450 },
+                    { name: "Royal Salmon Curry", price: 800 },
+                    { name: "Bhuna Prawns", price: 520 },
+                    { name: "Moilee Prawns", price: 550 }
+                ]
+            },
+            {
+                category: "Tandoori",
+                items: [
+                    { name: "Tandoori Chicken (Half)", price: 320 },
+                    { name: "Tandoori Chicken (Full)", price: 450 },
+                    { name: "Seekh Kebab", price: 380 },
+                    { name: "Paneer Tikka", price: 320 },
+                    { name: "Tandoori Prawns", price: 520 }
+                ]
+            },
+            {
+                category: "Breads",
+                items: [
+                    { name: "Plain Naan", price: 60 },
+                    { name: "Garlic Naan", price: 80 },
+                    { name: "Butter Naan", price: 70 },
+                    { name: "Tandoori Roti", price: 50 },
+                    { name: "Roti", price: 40 }
+                ]
+            },
+            {
+                category: "Biryani",
+                items: [
+                    { name: "Chicken Dum Biryani", price: 360 },
+                    { name: "Veg Biryani", price: 280 },
+                    { name: "Lamb Biryani", price: 420 },
+                    { name: "Prawn Biryani", price: 480 },
+                    { name: "Hyderabadi Biryani", price: 450 }
+                ]
+            },
+            {
+                category: "Rice",
+                items: [
+                    { name: "Steamed Basmati Rice", price: 120 },
+                    { name: "Jeera Rice", price: 150 },
+                    { name: "Peas Pulao", price: 180 },
+                    { name: "Veg Pulao", price: 220 }
+                ]
+            },
+            {
+                category: "Sweet Delights",
+                items: [
+                    { name: "Gulab Jamun", price: 140 },
+                    { name: "Rasmalai", price: 160 },
+                    { name: "Kheer", price: 120 },
+                    { name: "Mango Kulfi", price: 150 },
+                    { name: "Choclate Lava Cake", price: 220 },
+                    { name: "Chocolate chip Brownie with Ice Cream", price: 280 },
+                    { name: "Gajar Halwa", price: 130 }
+                ]
+            },
+            {
+                category: "Beverages",
+                items: [
+                    { name: "Mango Lassi", price: 120 },
+                    { name: "Sweet Lassi", price: 100 },
+                    { name: "Jaljeera", price: 100 },
+                    { name: "Filter Coffee", price: 100 },
+                    { name: "Masala Chai", price: 80 }
+                ]
+            },
+            {
+                category: "Special Combos",
+                items: [
+                    { name: "Vegetarian Feast", price: 750 },
+                    { name: "Non-Veg Delight", price: 950 },
+                    { name: "Tandoori Platter", price: 850 },
+                    { name: "Vegetarian Thali", price: 320 },
+                    { name: "Non-Veg Thali", price: 420 }
+                ]
+            }
+        ];
+
+        // Cart array to store items
+        let cart = [];
+        
+        // DOM elements
+        const notification = document.getElementById('notification');
+        const cartSection = document.querySelector('.cart-section');
+        const cartCount = document.querySelector('.cart-count');
+        const cartItemsBody = document.getElementById('cart-items-body');
+        const cartTotalAmount = document.getElementById('cart-total-amount');
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        const userEmailElement = document.getElementById('userEmail');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Function to get username from localStorage
+        function getUsername() {
+            const storedUsername = localStorage.getItem('loggedInUser');
+            return storedUsername || 'Guest User';
+        }
+
+        // Display username
+        userEmailElement.textContent = getUsername();
+
+        // Function to render categories
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+            
+            menuData.forEach(categoryData => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-container';
+                
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `
+                    <span>${categoryData.category}</span>
+                    <span>▼</span>
+                `;
+                
+                const itemsDiv = document.createElement('div');
+                itemsDiv.className = 'category-items';
+                
+                const table = document.createElement('table');
+                table.className = 'menu-table';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                
+                const tbody = table.querySelector('tbody');
+                categoryData.items.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-item', item.name);
+                    row.setAttribute('data-price', item.price.toFixed(2));
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>₹ ${item.price.toFixed(2)}</td>
+                        <td><button class="add-to-cart-btn">Add to Cart</button></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                itemsDiv.appendChild(table);
+                categoryDiv.appendChild(header);
+                categoryDiv.appendChild(itemsDiv);
+                container.appendChild(categoryDiv);
+                
+                // Add click event to header for expand/collapse
+                header.addEventListener('click', () => {
+                    itemsDiv.classList.toggle('active');
+                    const arrow = header.querySelector('span:last-child');
+                    arrow.textContent = itemsDiv.classList.contains('active') ? '▲' : '▼';
+                });
+            });
+            
+            // Add event listeners to all add-to-cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const itemName = row.getAttribute('data-item');
+                    const itemPrice = parseFloat(row.getAttribute('data-price'));
+                    
+                    // Check if item already exists in cart
+                    const existingItem = cart.find(item => item.name === itemName);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            name: itemName,
+                            price: itemPrice,
+                            quantity: 1
+                        });
+                    }
+                    
+                    // Update button state
+                    this.textContent = "Added!";
+                    this.classList.add('added');
+                    
+                    // Show notification
+                    showNotification(`${itemName} added to cart!`);
+                    
+                    // Update cart display
+                    updateCartDisplay();
+                    
+                    // Show cart section if it was hidden
+                    cartSection.style.display = 'block';
+                    
+                    // Reset button text after 2 seconds
+                    setTimeout(() => {
+                        this.textContent = "Add to Cart";
+                        this.classList.remove('added');
+                    }, 2000);
+                });
+            });
+        }
+
+        // Function to show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to update cart display
+        function updateCartDisplay() {
+            // Clear cart items body
+            cartItemsBody.innerHTML = '';
+            
+            // Add each item to the cart table
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.textContent = item.name;
+                
+                const priceCell = document.createElement('td');
+                priceCell.textContent = `₹ ${item.price.toFixed(2)}`;
+                
+                const quantityCell = document.createElement('td');
+                quantityCell.textContent = item.quantity;
+                
+                const totalCell = document.createElement('td');
+                const itemTotal = item.price * item.quantity;
+                totalCell.textContent = `₹ ${itemTotal.toFixed(2)}`;
+                
+                const actionCell = document.createElement('td');
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.className = 'remove-btn';
+                removeBtn.addEventListener('click', () => {
+                    removeFromCart(index);
+                });
+                actionCell.appendChild(removeBtn);
+                
+                row.appendChild(nameCell);
+                row.appendChild(priceCell);
+                row.appendChild(quantityCell);
+                row.appendChild(totalCell);
+                row.appendChild(actionCell);
+                
+                cartItemsBody.appendChild(row);
+                
+                total += itemTotal;
+            });
+            
+            // Update cart count and total
+            cartCount.textContent = `${cart.length} items`;
+            cartTotalAmount.textContent = total.toFixed(2);
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+            
+            // Hide cart section if empty
+            if (cart.length === 0) {
+                cartSection.style.display = 'none';
+            }
+            
+            showNotification('Item removed from cart!');
+        }
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('loggedInUser');
+                alert('Logged out successfully!');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Checkout functionality
+        // Replace your existing checkoutBtn.addEventListener with this:
+checkoutBtn.addEventListener('click', function() {
+    if (cart.length === 0) {
+        showNotification('Your cart is empty!');
+        return;
+    }
+    
+    // Save cart to localStorage so payment page can access it
+    localStorage.setItem('elaichiCart', JSON.stringify(cart));
+    
+    // Redirect to payment page
+    window.location.href = 'payyyyyyyy.html';
+});
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCategories();
+            console.log('User Dashboard loaded successfully!');
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

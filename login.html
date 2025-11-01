@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Admin Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9d7e4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #0056b3;
+            background-image: url('images/login.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: #fff;
+            z-index: 2;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #060707;
+            text-transform: uppercase;
+        }
+
+        .admin-login {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .admin-login:hover {
+            background-color: #003a7a;
+        }
+
+        .login-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #666;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .form-group label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23666"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0056b3;
+        }
+
+        .password-group label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 8.5 12 3.5 3.5 0 0 0 12 8.5A3.5 3.5 0 0 0 15.5 12 3.5 3.5 0 0 0 12 15.5zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-14C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="%23666"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .sign-in-btn {
+            background-color: #0056b3;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .sign-in-btn:hover {
+            background-color: #003a7a;
+        }
+
+        .create-account-btn {
+            background-color: transparent;
+            color: #0056b3;
+            border: 1px solid #0056b3;
+        }
+
+        .create-account-btn:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        /* Book-like styling */
+        .book-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(-2deg);
+        }
+
+        .book-page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(2deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="book-page"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ELAICHI</div>
+            <button class="admin-login">Admin Login</button>
+        </div>
+        
+        <div class="login-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="password-group form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn sign-in-btn" onclick="window.location.href='index.html'">Sign In</button>
+                <button type="button" class="btn create-account-btn" onclick="window.location.href='register.html'"></onclick>Create Account</button>
+                   
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple login validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                alert('Login successful!');
+                window.location.href = 'index.html';
+                // Here you would typically redirect to another page or send data to server
+            } else {
+                alert('Please enter both username and password.');
+            }
+        // Store username in localStorage
+localStorage.setItem('loggedInUser', document.getElementById('username').value);
+// Redirect to order page
+window.location.href = 'order.html';
+        });
+
+        // Create account button click
+        document.querySelector('.create-account-btn').addEventListener('click', function() {
+            alert('Redirecting to registration page...');
+            // Redirect to registration page
+        });
+        document.getElementById('createAccountBtn').addEventListener('click', showRegistration);
+    </script>
+</body>
+</html>

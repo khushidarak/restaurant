@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReserveTable | Create Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            z-index: 2000;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+        }
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .notification i {
+            font-size: 20px;
+        }
+
+        /* Registration Card */
+        .registration-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            width: 100%;
+            max-width: 520px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .registration-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-header {
+            background: linear-gradient(120deg, #d32f2f, #b71c1c);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .card-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .card-header p {
+            margin-top: 8px;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        .input-with-icon {
+            position: relative;
+        }
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            font-size: 16px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #eaeaea;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+        }
+
+        .error {
+            color: #e53935;
+            font-size: 14px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-register {
+            background: linear-gradient(120deg, #d32f2f, #b71c1c);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+        }
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        /* Go to Home Button (new) */
+        .btn-go-home {
+            background: linear-gradient(120deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            display: none; /* Hidden by default */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        .btn-go-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card-header {
+                padding: 25px;
+            }
+            .card-body {
+                padding: 30px 25px;
+            }
+            .notification {
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <i class="fas fa-utensils"></i>
+        <span>Redirecting to registration...</span>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="registration-card" id="registrationCard">
+        <div class="card-header">
+            <h2>Create Your Account</h2>
+            <p>Join our culinary community</p>
+        </div>
+        <div class="card-body">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="error" id="nameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" class="form-control" placeholder="your@email.com" required>
+                    </div>
+                    <div class="error" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" class="form-control" placeholder="(123) 456-7890" required>
+                    </div>
+                    <div class="error" id="phoneError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" class="form-control" placeholder="Create a strong password" required>
+                    </div>
+                    <div class="error" id="passwordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter your password" required>
+                    </div>
+                    <div class="error" id="confirmError"></div>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+
+                <!-- New: Go to Home Button (appears after success) -->
+                <button type="button" class="btn-go-home" id="goHomeBtn" onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i> Go to Home Page
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showRegistration() {
+            const notification = document.getElementById('notification');
+            const card = document.getElementById('registrationCard');
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                card.classList.add('show');
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+            
+            const name = document.getElementById('fullName').value.trim();
+            if (name.length < 2) {
+                showError('nameError', 'Please enter your full name');
+                isValid = false;
+            }
+            
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('emailError', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            const phone = document.getElementById('phone').value.replace(/\D/g, '');
+            if (phone.length !== 10) {
+                showError('phoneError', 'Please enter a valid 10-digit phone number');
+                isValid = false;
+            }
+            
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                showError('passwordError', 'Password must be at least 8 characters');
+                isValid = false;
+            }
+            
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                showError('confirmError', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show success on main button
+                const registerBtn = document.querySelector('.btn-register');
+                registerBtn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
+                registerBtn.style.background = 'linear-gradient(120deg, #4CAF50, #2E7D32)';
+                registerBtn.style.boxShadow = '0 4px 15px rgba(76, 175, 80, 0.4)';
+                
+                // Show "Go to Home" button
+                document.getElementById('goHomeBtn').style.display = 'block';
+                
+                // Optional: auto-hide register button after delay
+                setTimeout(() => {
+                    alert('🎉 Welcome to our restaurant family! Your account has been created.');
+                    //window.location.href = 'index.html'; // Redirect to home after success
+                }, 1500);
+            }
+        });
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        }
+
+        showRegistration();
+    </script>
+</body>
+</html>

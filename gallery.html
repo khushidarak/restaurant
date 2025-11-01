@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Indian Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B0000;
+            --secondary: #D4AF37;
+            --accent: #A52A2A;
+            --light: #F5F5F5;
+            --dark: #222222;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .top-header {
+            background-color: var(--dark);
+            color: white;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .top-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .contact-info span {
+            margin-right: 20px;
+        }
+
+        .contact-info i {
+            margin-right: 5px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .main-header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            margin-left: 10px;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #666;
+            margin-top: -5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+            position: relative;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul li a.active:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 300px;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .breadcrumb li {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        .breadcrumb li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb li:after {
+            content: '>';
+            margin-left: 10px;
+            color: #ccc;
+        }
+
+        .breadcrumb li:last-child:after {
+            content: '';
+        }
+
+        .breadcrumb li:last-child {
+            color: var(--secondary);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            height: 250px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(139, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay-content {
+            text-align: center;
+            color: white;
+        }
+
+        .gallery-overlay-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .gallery-overlay-content p {
+            font-size: 14px;
+        }
+
+        .view-btn {
+            background: var(--secondary);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: white;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--secondary);
+        }
+
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .lightbox-nav button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lightbox-nav button:hover {
+            background: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-col p {
+            margin-bottom: 15px;
+            color: #bbb;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #333;
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-header {
+                display: none;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                height: 250px;
+            }
+            
+            .hero-content h1 {
+                font-size: 28px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="top-header-container">
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> +1 234 567 8900</span>
+                <span><i class="fas fa-envelope"></i> info@indiarestaurant.com</span>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>ELAICHI</h1>
+                    <p>AUTHENTIC INDIAN CUISINE</p>
+                </div>
+            </div>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="mobile-menu" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Our Gallery</h1>
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li>Gallery</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Restaurant Gallery</h2>
+                <p>Explore our restaurant ambiance, delicious dishes, and memorable events through our photo gallery</p>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="food">Food</button>
+                <button class="filter-btn" data-filter="interior">Interior</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="chefs">Chefs</button>
+            </div>
+
+            <div class="gallery-grid">
+                <!-- Food Items -->
+                <div class="gallery-item" data-category="food">
+                    <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Butter Chicken">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Butter Chicken</h3>
+                            <p>Rich and creamy Indian delicacy</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="food">
+                    <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Biryani">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Hyderabadi Biryani</h3>
+                            <p>Aromatic rice dish with spices</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="food">
+                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tandoori">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Tandoori Platter</h3>
+                            <p>Grilled to perfection in clay oven</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interior Items -->
+                <div class="gallery-item" data-category="interior">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Restaurant Interior">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Main Dining Area</h3>
+                            <p>Elegant and comfortable seating</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="interior">
+                    <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bar Area">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Bar & Lounge</h3>
+                            <p>Perfect for pre-dinner drinks</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="interior">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Private Dining">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Private Dining</h3>
+                            <p>Exclusive area for special events</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Events Items -->
+                <div class="gallery-item" data-category="events">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Wedding Event">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Wedding Reception</h3>
+                            <p>Memorable celebrations with us</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="events">
+                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Corporate Event">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Corporate Dinner</h3>
+                            <p>Professional and elegant setting</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="events">
+                    <img src="https://images.unsplash.com/photo-1554679665-f5537f187268?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Birthday Party">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Birthday Celebration</h3>
+                            <p>Special moments with loved ones</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chefs Items -->
+                <div class="gallery-item" data-category="chefs">
+                    <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Chef Preparing Food">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Chef at Work</h3>
+                            <p>Preparing authentic Indian dishes</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="chefs">
+                    <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Chef Team">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Our Culinary Team</h3>
+                            <p>Dedicated to excellence</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="chefs">
+                    <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cooking Demonstration">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <h3>Cooking Demo</h3>
+                            <p>Sharing our culinary secrets</p>
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>Indian Restaurant</h4>
+                <p>Experience the authentic taste of India with our carefully crafted dishes made from traditional recipes and the finest ingredients.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Spice Street, Food City</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                <p><i class="fas fa-envelope"></i> info@indiarestaurant.com</p>
+                <p><i class="fas fa-clock"></i> Mon-Sun: 11:00 AM - 11:00 PM</p>
+            </div>
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <p>Subscribe to our newsletter for updates and special offers.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your Email" style="padding: 10px; width: 100%; margin-bottom: 10px; border: none; border-radius: 5px;">
+                    <button type="submit" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Indian Restaurant. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close">&times;</span>
+            <img src="" alt="Gallery Image">
+            <div class="lightbox-caption"></div>
+            <div class="lightbox-nav">
+                <button id="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button id="next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('show');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#nav-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('nav-menu').classList.remove('show');
+            });
+        });
+
+        // Gallery Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filterValue = this.getAttribute('data-filter');
+                
+                galleryItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        const lightboxCaption = lightbox.querySelector('.lightbox-caption');
+        const lightboxClose = lightbox.querySelector('.lightbox-close');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const viewButtons = document.querySelectorAll('.view-btn');
+
+        let currentIndex = 0;
+        const images = Array.from(galleryItems).map(item => ({
+            src: item.querySelector('img').src,
+            alt: item.querySelector('img').alt,
+            title: item.querySelector('h3').textContent,
+            description: item.querySelector('p').textContent
+        }));
+
+        // Open lightbox when view button is clicked
+        viewButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                currentIndex = index;
+                updateLightbox();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close lightbox
+        lightboxClose.addEventListener('click', function() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close lightbox when clicking outside the image
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Navigation
+        prevBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        });
+
+        nextBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                } else if (e.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    updateLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateLightbox();
+                }
+            }
+        });
+
+        function updateLightbox() {
+            lightboxImg.src = images[currentIndex].src;
+            lightboxImg.alt = images[currentIndex].alt;
+            lightboxCaption.textContent = `${images[currentIndex].title} - ${images[currentIndex].description}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elaichi - Billing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B5A3C;
+            --secondary: #D4A574;
+            --accent: #E8B487;
+            --light: #F9F5F0;
+            --dark: #3E2723;
+            --success: #4CAF50;
+            --error: #f44336;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #f5f0e6 0%, #e8e1d1 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .billing-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            flex: 1;
+            min-width: 300px;
+            transition: var(--transition);
+        }
+
+        .billing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        .bill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .bill-number {
+            font-weight: 600;
+        }
+
+        .bill-date {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .bill-items {
+            margin-bottom: 30px;
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .bill-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 2;
+        }
+
+        .item-quantity {
+            flex: 1;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .item-price {
+            flex: 1;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .bill-summary {
+            background: #f9f5f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid var(--accent);
+        }
+
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-option:hover {
+            border-color: var(--secondary);
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(139, 90, 60, 0.1);
+            box-shadow: 0 0 0 3px rgba(139, 90, 60, 0.2);
+        }
+
+        .payment-option i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .payment-option span {
+            font-weight: 500;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 90, 60, 0.3);
+        }
+
+        .btn-print {
+            background: #4CAF50;
+        }
+
+        .btn-print:hover {
+            background: #45a049;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .customer-info {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-section {
+            margin-bottom: 30px;
+        }
+
+        .info-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list i {
+            color: var(--secondary);
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .payment-options {
+                flex-direction: column;
+            }
+        }
+
+        /* Animation for bill items */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .billing-card, .customer-info {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .billing-card {
+            animation-delay: 0.2s;
+        }
+
+        /* Receipt styling for print */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                padding: 0;
+                gap: 0;
+            }
+            
+            .billing-card, .customer-info {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+            
+            .btn {
+                display: none;
+            }
+            
+            .header {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Elaichi</h1>
+            <p>Thank you for dining with us. Please review your bill below.</p>
+        </div>
+        
+        <div class="billing-card">
+            <h2 class="card-title">Bill Details</h2>
+            
+            <div class="bill-info">
+                <div class="bill-number">Bill #<span id="billNumber">EL-2023-0472</span></div>
+                <div class="bill-date">Date: <span id="billDate">October 15, 2023</span></div>
+            </div>
+            
+            <div class="bill-items" id="billItems">
+                <!-- Bill items will be populated by JavaScript -->
+            </div>
+            
+            <div class="bill-summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">$85.50</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (8.5%)</span>
+                    <span id="tax">$7.27</span>
+                </div>
+                <div class="summary-row">
+                    <span>Service Charge (15%)</span>
+                    <span id="serviceCharge">$12.83</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="total">$105.60</span>
+                </div>
+            </div>
+            
+            <div class="payment-methods">
+                <h3>Select Payment Method</h3>
+                <div class="payment-options">
+                    <div class="payment-option selected" data-method="credit">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Credit Card</span>
+                    </div>
+                    <div class="payment-option" data-method="cash">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Cash</span>
+                    </div>
+                    <div class="payment-option" data-method="mobile">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile Pay</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" id="payBtn">Complete Payment</button>
+            <button class="btn btn-print" id="printBtn">Print Receipt</button>
+        </div>
+        
+        <div class="customer-info">
+            <div class="info-section">
+                <h3>Customer Information</h3>
+                <ul class="info-list">
+                    <li><i class="fas fa-user"></i> <span id="customerName">John Smith</span></li>
+                    <li><i class="fas fa-envelope"></i> <span id="customerEmail">john@example.com</span></li>
+                    <li><i class="fas fa-phone"></i> <span id="customerPhone">(555) 123-4567</span></li>
+                    <li><i class="fas fa-chair"></i> <span id="tableNumber">Table 12</span></li>
+                    <li><i class="fas fa-users"></i> <span id="partySize">4 Guests</span></li>
+                </ul>
+            </div>
+            
+            <div class="info-section">
+                <h3>Restaurant Details</h3>
+                <ul class="info-list">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Gourmet Avenue, Culinary District</li>
+                    <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@elaichi.com</li>
+                    <li><i class="fas fa-globe"></i> www.elaichi.com</li>
+                </ul>
+            </div>
+            
+            <div class="info-section">
+                <h3>Payment Policy</h3>
+                <ul class="info-list">
+                    <li><i class="fas fa-check-circle"></i> All major credit cards accepted</li>
+                    <li><i class="fas fa-check-circle"></i> Receipts emailed upon request</li>
+                    <li><i class="fas fa-check-circle"></i> Gratuities not included in service charge</li>
+                    <li><i class="fas fa-check-circle"></i> Questions? Ask your server</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample bill data
+            const billData = {
+                items: [
+                    { name: "Truffle Risotto", quantity: 2, price: 28.50 },
+                    { name: "Grilled Salmon", quantity: 1, price: 32.00 },
+                    { name: "Caesar Salad", quantity: 1, price: 15.00 },
+                    { name: "House Wine (Glass)", quantity: 3, price: 12.00 },
+                    { name: "Chocolate Soufflé", quantity: 2, price: 14.00 }
+                ],
+                taxRate: 0.085,
+                serviceChargeRate: 0.15,
+                customer: {
+                    name: "John Smith",
+                    email: "john@example.com",
+                    phone: "(555) 123-4567",
+                    table: "12",
+                    partySize: 4
+                }
+            };
+            
+            // Set current date
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('billDate').textContent = now.toLocaleDateString('en-US', options);
+            
+            // Generate bill number with "EL" prefix for Elaichi
+            const billNumber = EL-${now.getFullYear()}-${Math.floor(1000 + Math.random() * 9000)};
+            document.getElementById('billNumber').textContent = billNumber;
+            
+            // Populate customer info
+            document.getElementById('customerName').textContent = billData.customer.name;
+            document.getElementById('customerEmail').textContent = billData.customer.email;
+            document.getElementById('customerPhone').textContent = billData.customer.phone;
+            document.getElementById('tableNumber').textContent = Table ${billData.customer.table};
+            document.getElementById('partySize').textContent = ${billData.customer.partySize} Guests;
+            
+            // Populate bill items
+            const billItemsContainer = document.getElementById('billItems');
+            let subtotal = 0;
+            
+            billData.items.forEach(item => {
+                const itemTotal = item.quantity * item.price;
+                subtotal += itemTotal;
+                
+                const billItem = document.createElement('div');
+                billItem.className = 'bill-item';
+                billItem.innerHTML = `
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-quantity">${item.quantity}</div>
+                    <div class="item-price">$${itemTotal.toFixed(2)}</div>
+                `;
+                billItemsContainer.appendChild(billItem);
+            });
+            
+            // Calculate totals
+            const tax = subtotal * billData.taxRate;
+            const serviceCharge = subtotal * billData.serviceChargeRate;
+            const total = subtotal + tax + serviceCharge;
+            
+            // Update summary
+            document.getElementById('subtotal').textContent = $${subtotal.toFixed(2)};
+            document.getElementById('tax').textContent = $${tax.toFixed(2)};
+            document.getElementById('serviceCharge').textContent = $${serviceCharge.toFixed(2)};
+            document.getElementById('total').textContent = $${total.toFixed(2)};
+            
+            // Payment method selection
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Payment button
+            document.getElementById('payBtn').addEventListener('click', function() {
+                const selectedMethod = document.querySelector('.payment-option.selected').dataset.method;
+                let methodText = '';
+                
+                switch(selectedMethod) {
+                    case 'credit':
+                        methodText = 'credit card';
+                        break;
+                    case 'cash':
+                        methodText = 'cash';
+                        break;
+                    case 'mobile':
+                        methodText = 'mobile payment';
+                        break;
+                }
+                
+                alert(Payment of $${total.toFixed(2)} processed successfully via ${methodText}!\n\nThank you for dining at Elaichi. We hope to see you again soon!);
+            });
+            
+            // Print functionality
+            document.getElementById('printBtn').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Add subtle animation to payment options
+            paymentOptions.forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                option.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

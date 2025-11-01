@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ELAICHI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --accent: #A0522D;
+            --light: #F5F5DC;
+            --dark: #2C2C2C;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .tagline {
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Story Section */
+        .story-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        .story-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .story-text {
+            flex: 1;
+        }
+
+        .story-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .story-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+        }
+
+        .story-image:hover {
+            transform: scale(1.03);
+        }
+
+        .story-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            padding: 100px 0;
+            background-color: var(--light);
+            position: relative;
+        }
+
+        .mission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .mission-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .mission-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--secondary);
+        }
+
+        .mission-icon {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .mission-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* Why People Choose Us Section (NEW) */
+        .why-choose-us-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .why-choose-us-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .why-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .why-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .why-text {
+            flex: 1;
+        }
+
+        .why-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        .reason-list {
+            list-style: none;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .reason-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .reason-content h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .reason-content p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* About Us Section (NEW) */
+        .about-us-section {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .about-us-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* Keeps proportions & crops if needed */
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-top: 150px solid #FFD700;
+            z-index: -1;
+        }
+
+        /* Values Section */
+        .values-section {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .values-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .value-item {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+        }
+
+        .value-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-col p {
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .story-content,
+            .why-choose-us-content,
+            .about-us-content {
+                flex-direction: column;
+            }
+            
+            .story-image, .story-text,
+            .why-image, .why-text,
+            .about-image, .about-text {
+                flex: auto;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .story-section,
+            .mission-section,
+            .why-choose-us-section,
+            .about-us-section,
+            .values-section {
+                padding: 60px 0;
+            }
+            
+            .why-choose-us-content,
+            .about-us-content {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <h1 class="logo">ELAICHI</h1>
+            <p class="tagline">A Culinary Journey </p>
+            <div class="header-buttons">
+                <a href="index.html#menu" class="nav-btn"  >Our Menu</a>
+                <a href="gallery.html#gallery" class="nav-btn">Gallery</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Our Story Section -->
+    <section class="story-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Our Story</h2>
+            <div class="story-content fade-in">
+                <div class="story-text">
+                    <h3>From Humble Beginnings</h3>
+                    <p><i><b>Rooted in Spice, Crafted with Love💖</b></i></p>
+                    <p><i><b>A Dream Simmered in Spice !!🔥</b></i></p>
+                    <p>Elaichi began as a quiet passion—a desire to share the true depth and warmth of Indian cuisine beyond the familiar. What started as a small kitchen dream has grown into a space where tradition meets taste, and every meal feels like home.</p>
+                    <p>Inspired by generations of home cooks who measured spices by hand and patience by the slow simmer of a curry, Elaichi was built on one belief: <b>great Indian food isn’t just cooked—it’s remembered.</b></p>
+                    <p>From the first batch of tandoori naan to our signature cardamom-infused biryani, we’ve stayed true to time-honored techniques—grinding spices fresh daily, marinating meats overnight, and balancing flavors with care. Our menu travels from the coastal curries of Goa to the rich gravies of Punjab, honoring India’s incredible culinary diversity in every dish.</p>
+                    <p>Today, Elaichi is more than a restaurant.</p>
+                    <p>It’s where friends gather over steaming bowls of dal,</p>
+                    <p>where first-timers discover the magic of garam masala,
+                       and where every guest leaves with a little more warmth than they came with.</p>
+
+
+                    <p><b>Named after the fragrant cardamom that ties our dishes together,</b></p>
+                     <p><b>Elaichi is a celebration of flavor, family, and the art of sharing food with love. 🌿</b></p>
+
+                </div>
+                <div class="story-image">
+                    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Restaurant Interior">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Mission Section -->
+    <section class="mission-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Our Mission</h2>
+            <div class="mission-cards">
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Quality Ingredients</h3>
+                    <p>We source the freshest, locally-sourced ingredients to ensure every dish meets our high standards of quality and flavor.</p>
+                </div>
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Culinary Excellence</h3>
+                    <p>Our chefs combine traditional techniques with innovative approaches to create unforgettable dining experiences.</p>
+                </div>
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Exceptional Service</h3>
+                    <p>We believe that exceptional food deserves exceptional service, creating warm and memorable moments for every guest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why People Choose Us Section (REPLACEMENT FOR "Meet Our Team") -->
+    <section class="why-choose-us-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Why People Choose Us?</h2>
+            <div class="why-choose-us-content fade-in">
+                <div class="why-image">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Delicious Bowl of Food">
+                </div>
+                <div class="why-text">
+                    <div class="reason-list">
+                   <div class="reason-item">
+                   <div class="reason-icon"><i class="fas fa-utensils"></i></div>
+                   <div class="reason-content">
+                     <h4>Authentic Indian Flavors – Veg & Non-Veg</h4>
+                     <p>From aromatic biryanis to tandoori grills and creamy curries, we honor India’s diverse culinary traditions with genuine recipes and balanced spices—crafted for every palate.</p>
+                    </div>
+                </div>
+                <div class="reason-item">
+                  <div class="reason-icon"><i class="fas fa-leaf"></i></div>
+                  <div class="reason-content">
+                       <h4>Freshly Prepared, Never Compromised</h4>
+                       <p>Every dish is made from scratch daily using premium ingredients, house-ground spices, and traditional techniques—no shortcuts, just real taste.</p>
+                  </div>
+                </div>
+                <div class="reason-item">
+                   <div class="reason-icon"><i class="fas fa-heart"></i></div>
+                   <div class="reason-content">
+                      <h4>Warm Hospitality, Memorable Moments</h4>
+                      <p>At Elaichi, you’re family. Our inviting ambiance and heartfelt service turn every meal into a celebration worth returning to.</p>
+                 </div>
+              </div>
+         </div>
+     </div>
+ </div>
+        </div>
+    </section>
+
+    <!-- About Us Section (NEW) -->
+    <section class="about-us-section">
+        <div class="container">
+            <h2 class="section-title fade-in">About Us</h2>
+            <div class="about-us-content fade-in">
+                <div class="about-text">
+                    <p>At Elaichi, food is never just sustenance—it’s <i><b>a ritual 🪔, a memory, a bridge between generations 👨‍👩‍👧‍👦</b></i>.</p>
+                    <p>Named after the golden-green cardamom 🌿— the soul of Indian kitchens—our restaurant is a heartfelt homage to India’s vast, vibrant, and deeply nuanced culinary tapestry. Every spice, every simmer, every sear tells a story rooted in tradition, yet alive with passion.
+                      <p>Born from a dream to share <i><b>authentic Indian hospitality 🤝</b></i>, Elaichi blends ancestral recipes with the finest locally sourced ingredients. 
+                        <p>Our chefs honor time-tested techniques:</p>
+                        <p>✨ Marinating meats in hand-ground masalas overnight, </p>
+                        <p>🔥 Baking  naan in a roaring tandoor,</p>
+                        <p>🍚 Layering biryanis with patience and precision.</p> 
+                        <p>The result? Dishes that don’t just feed the body—but stir the soul ❤️.</p>
+                          <p><i><b>Journey with us across India on a single plate:</b></i></p>
+                           <p> → Savor the velvety richness of Punjabi butter chicken 🍗,</p>
+                           <p> → The fiery coastal punch of Goan vindaloo 🌶️,</p>
+                           <p> → The fragrant elegance of Hyderabadi biryani 🌸,</p>
+                            <p>>→ And the wholesome grace of Gujarati thalis 🥥. </p>
+                            <p>Whether you’re here for slow-braised lamb rogan josh,  crisp paneer tikka 🧀, or warm gulab jamun dripping in rose syrup 🌹— <i><b>every bite is crafted with reverence</b></i>.</p>
+                          <p>But Elaichi is more than exceptional food 🍽️. </p>
+                            <p>It’s the glow of ambient light on handcrafted copperware ✨.</p>
+                          <p>It’s the quiet hum of conversation over shared platters 🗣️.</p>
+                          <p>It’s the smile that greets you like an old friend 😊.</p>
+                          <p><i><b>This is where meals become moments—and moments become memories 💫</b></i>.</p>
+                          <p>Come, let your senses awaken 🌺.</p>
+                           <p><i><b>Welcome to Elaichi—where every dish has a heritage, and every guest, a home 🏡..!!</b></i></p>
+                        </p>
+                </div>
+                <div class="about-image">
+                    <img src="images/man.png" alt="Chef in Uniform">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Our Values</h2>
+            <div class="values-content">
+                <div class="value-item fade-in">
+                    <div class="value-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Sustainability</h3>
+                    <p>We're committed to environmentally responsible practices, from sourcing to waste reduction.</p>
+                </div>
+                <div class="value-item fade-in">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Community</h3>
+                    <p>We support local farmers and producers, strengthening our community through partnerships.</p>
+                </div>
+                <div class="value-item fade-in">
+                    <div class="value-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Excellence</h3>
+                    <p>We never compromise on quality, striving for perfection in every aspect of our restaurant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>Savory Delights</h3>
+                    <p>Experience culinary excellence in an elegant atmosphere. Join us for an unforgettable dining experience.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Gourmet Avenue, Culinary District</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@savorydelights.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Sun: 11:00 AM - 11:00 PM</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <p><a href="#">Home</a></p>
+                    <p><a href="#">Our Menu</a></p>
+                    <p><a href="#">Reservations</a></p>
+                    <p><a href="#">Gallery</a></p>
+                    <p><a href="#">Contact Us</a></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Savory Delights Restaurant. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade-in animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Check on load
+            fadeInOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapshots Orders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9d7e4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #0056b3;
+            background-image: url('https://images.unsplash.com/photo-1578587287152-86138625a90c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: #fff;
+            z-index: 2;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0056b3;
+            text-transform: uppercase;
+        }
+
+        .orders-title {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .orders-title:hover {
+            background-color: #003a7a;
+        }
+
+        .main-content {
+            display: flex;
+            height: calc(100% - 60px);
+            z-index: 2;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #000;
+            color: white;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ccc;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid #e67e22;
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid #e67e22;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            background-color: #111;
+            overflow-y: auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .dashboard-title-small {
+            font-size: 18px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-title-small i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .admin-profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .order-list-container {
+            background-color: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-table th {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .order-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .order-table tr:nth-child(even) {
+            background-color: #e6c38c;
+        }
+
+        .order-table tr:nth-child(odd) {
+            background-color: #f5f5f5;
+        }
+
+        /* Book-like styling */
+        .book-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(-2deg);
+        }
+
+        .book-page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #fff, #f9d7e4);
+            border-radius: 15px;
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: rotate(2deg);
+        }
+
+        /* Icons using SVG */
+        .icon-dashboard {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-customers {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.33 0-4 1.67-4 4v2h8v-2c0-2.33-1.67-4-4-4zm6 0c-2.33 0-4 1.67-4 4v2h8v-2c0-2.33-1.67-4-4-4z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-sales {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-orders {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-inventory {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-management {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-logout {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23ccc"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 18px;
+            height: 18px;
+        }
+
+        .icon-admin {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="%23000"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-page"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <button class="orders-title">Orders</button>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-header">ELAICHI</div>
+                <a href="#" class="nav-item active icon-dashboard">Dashboard</a>
+                <a href="#" class="nav-item icon-customers">Customers</a>
+                <a href="#" class="nav-item icon-sales">Sales</a>
+                <a href="#" class="nav-item icon-inventory">Inventory</a>
+                <a href="#" class="nav-item icon-orders">Orders</a>
+                <a href="#" class="nav-item icon-management">Management</a>
+                <a href="#" class="nav-item icon-logout">Logout</a>
+            </div>
+            
+            <div class="content-area">
+                <div class="dashboard-header">
+                    <div class="dashboard-title-small">
+                        <span class="icon-orders"></span>
+                        Order
+                    </div>
+                    <div class="admin-profile">
+                        <span class="icon-admin"></span>
+                        Admin
+                    </div>
+                </div>
+                
+                <div class="order-list-container">
+                    <div class="order-header">Order List</div>
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                                <th>Customer Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-list-body">
+                            <!-- Orders will be added here dynamically -->
+                            <tr>
+                                <td>Chocolate Cake</td>
+                                <td>2</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Chicken Tikka Masala</td>
+                                <td>1</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Wonton</td>
+                                <td>2</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Panner Tikka Kabab</td>
+                                <td>2</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Butternut Pumpkin</td>
+                                <td>2</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Gulab Jamun</td>
+                                <td>1</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Apple Pie</td>
+                                <td>3</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Gulab Jamun</td>
+                                <td>2</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                            <tr>
+                                <td>Apple Pie</td>
+                                <td>9</td>
+                                <td id="customer-name">Rohan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Function to update customer name based on login data
+        function updateCustomerName() {
+            // In a real application, retrieve the customer name from localStorage or session
+            const customerName = localStorage.getItem('customerName') || 'Rohan';
+            
+            // Update all customer name cells
+            document.querySelectorAll('#order-list-body td[id="customer-name"]').forEach(cell => {
+                cell.textContent = customerName;
+            });
+        }
+
+        // Call the function when the page loads
+        window.onload = function() {
+            console.log('Orders page loaded successfully!');
+            updateCustomerName();
+        };
+
+        // Example of how you would set the customer name after login
+        // This would be called on your login page after successful login
+        function setCustomerName(name) {
+            localStorage.setItem('customerName', name);
+            // You might also want to redirect to the orders page
+            // window.location.href = "orders.html";
+        }
+
+        // Example usage - uncomment to test:
+        // setCustomerName("John Doe"); // This would change the customer name to John Doe
+        // On your login page, after successful login:
+localStorage.setItem('customerName', document.getElementById('username').value);
+// Then redirect to the orders page
+window.location.href = "orders.html";
+    </script>
+</body>
+</html>
